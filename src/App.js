@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import { auth } from "./config";
+import { useState, useEffect } from "react";
+import Login from "./components/Login";
+import NavBar from "./components/NavBar";
+import Spinner from "./components/Spinner";
+import ChatRoom from "./components/ChatRoom";
+import "./App.css";
 
-function App() {
+import { useAuthState } from "react-firebase-hooks/auth";
+
+const App = () => {
+  const [user] = useAuthState(auth);
+  const [currentRoom, setCurrentRoom] = useState("Need Help");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      {loading && <Spinner />}
+      <NavBar
+        user={user}
+        currentRoom={currentRoom}
+        setCurrentRoom={setCurrentRoom}
+      />
+      <div className="content">
+        {user ? <ChatRoom currentRoom={currentRoom} /> : <Login />}
+      </div>
     </div>
   );
-}
+};
 
 export default App;
