@@ -18,7 +18,7 @@ const App = () => {
       setLoading(false);
     }, 3000);
   }, []);
-//test
+
   return (
     <div className="app">
       {loading && <Spinner />}
